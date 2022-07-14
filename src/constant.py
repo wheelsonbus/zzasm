@@ -1,0 +1,12 @@
+# Token enumeration
+T_NONE = ''
+T_INVALID = '?'
+T_EOF = 'eof'
+T_NEWLINE = '\n'
+T_COMMA = ','
+T_MOV = 'mov'
+T_HLT = 'hlt'
+T_REGISTER = 'r'
+T_ADDRESS = '$'
+T_IMMEDIATE = '0'
+T_IDENTIFIER = 'id'
