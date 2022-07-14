@@ -33,17 +33,6 @@ class Lexer:
                 return Token(constant.T_NEWLINE, s)
             elif s == ',':
                 return Token(constant.T_COMMA, s)
-            elif s.isnumeric():
-                if s == '0':
-                    c = self.peek_char()
-                    if c == 'b' or c == 'd' or c == 'x':
-                        s += self.get_char()
-                        while self.peek_char().isnumeric():
-                            s += self.get_char()
-                        return Token(constant.T_IMMEDIATE, s)
-                while self.peek_char().isnumeric():
-                    s += self.get_char()
-                return Token(constant.T_IMMEDIATE, s)
             elif s.isalpha() or s == '.':
                 while self.peek_char().isalnum():
                     s += self.get_char()
@@ -55,6 +44,21 @@ class Lexer:
                     return Token(constant.T_REGISTER, s)
                 else:
                     return Token(constant.T_IDENTIFIER, s)
+            elif s.isnumeric():
+                if s == '0':
+                    c = self.peek_char()
+                    if c == 'b' or c == 'd' or c == 'x':
+                        s += self.get_char()
+                        while self.peek_char().isnumeric():
+                            s += self.get_char()
+                        return Token(constant.T_IMMEDIATE, s)
+                while self.peek_char().isnumeric():
+                    s += self.get_char()
+                return Token(constant.T_IMMEDIATE, s)
+            elif s == '$':
+                while self.peek_char().isalnum():
+                    s += self.get_char()
+                return Token(constant.T_ADDRESS, s)
             elif s == ' ':
                 pass
             else:

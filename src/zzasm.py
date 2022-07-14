@@ -6,8 +6,8 @@ import parser
 
 # TODO: Needs argument handling
 def main(argv):
-    p = parser.Parser(argv[1])
-    p.run()
+    p = parser.Parser()
+    p.parse(argv[1], argv[2])
 
 
 # Entry point
