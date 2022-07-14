@@ -1,0 +1,5 @@
+mov a, 0b0001
+mov b, 0x02
+mov c, 0d3
+mov d, 4
+hlt
