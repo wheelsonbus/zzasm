@@ -2,7 +2,7 @@
 T_NONE = ''
 T_INVALID = '?'
 T_EOF = 'eof'
-T_NEWLINE = '\n'
+T_NEWLINE = 'nl'
 T_COMMA = ','
 T_MOV = 'mov'
 T_HLT = 'hlt'
