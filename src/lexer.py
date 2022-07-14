@@ -58,4 +58,4 @@ class Lexer:
             elif s == ' ':
                 pass
             else:
-                return Token(constant.T_INVALID, s)
+                return Token(constant.T_UNKNOWN, s)

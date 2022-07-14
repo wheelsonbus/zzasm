@@ -1,6 +1,6 @@
 # Token enumeration
 T_NONE = ''
-T_INVALID = '?'
+T_UNKNOWN = '?'
 T_EOF = 'eof'
 T_NEWLINE = 'nl'
 T_COMMA = ','
