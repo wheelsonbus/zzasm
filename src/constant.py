@@ -1,5 +1,5 @@
-# Token enumeration
 class C:
+    # Token enumeration
     T_NONE = ''
     T_UNKNOWN = '?'
     T_EOF = 'eof'
