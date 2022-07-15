@@ -1,12 +1,14 @@
 from constant import *
 
 
+# Token data structure
 class Token:
     def __init__(self, t, s):
         self.t = t
         self.s = s
 
 
+# Lexer class provides abstraction with which to split up and through individual tokens of an assembly file
 class Lexer:
     def __init__(self, path):
         self.f = open(path, 'r')
@@ -14,23 +16,30 @@ class Lexer:
     def __del__(self):
         self.f.close()
 
+    # Consumes and returns the next character in the stream
     def get_char(self):
         return self.f.read(1)
 
+    # Returns next the character in the stream without consuming it
     def peek_char(self):
         c = self.f.read(1)
         self.f.seek(self.f.tell() - 1)
         return c
 
+    # Consumes and returns the next complete token in the stream
     # TODO: Needs expanded opcode handling
     # TODO: Needs comment and label handling
     def get_token(self):
         while True:
             s = self.get_char()
+
+            # End of file
             if s == '':
                 return Token(C.T_EOF, s)
+            # Newline
             elif s == '\n':
                 return Token(C.T_NEWLINE, s)
+            # Opcodes and alphanumerical identifiers
             elif s.isalpha() or s == '.':
                 while self.peek_char().isalnum():
                     s += self.get_char()
@@ -63,6 +72,7 @@ class Lexer:
                         return Token(C.T_REGISTER, s)
                     case _:
                         return Token(C.T_IDENTIFIER, s)
+            # Immediates
             elif s.isnumeric():
                 if s == '0':
                     c = self.peek_char()
@@ -74,11 +84,14 @@ class Lexer:
                 while self.peek_char().isnumeric():
                     s += self.get_char()
                 return Token(C.T_IMMEDIATE, s)
+            # Memory literals
             elif s == '$':
                 while self.peek_char().isalnum():
                     s += self.get_char()
                 return Token(C.T_ADDRESS, s)
+            # Whitespace
             elif s == ' ':
                 pass
+            # Unknown tokens
             else:
                 return Token(C.T_UNKNOWN, s)
