@@ -1,13 +1,13 @@
 import sys
 
-import constant
-import parser
+from constant import *
+from parser import *
 
 
 # TODO: Needs argument handling
 def main(argv):
-    p = parser.Parser()
-    p.parse(argv[1], argv[2])
+    parser = Parser()
+    parser.parse(argv[1], argv[2])
 
 
 # Entry point

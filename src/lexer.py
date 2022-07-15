@@ -1,4 +1,4 @@
-import constant
+from constant import *
 
 
 class Token:
@@ -28,41 +28,41 @@ class Lexer:
         while True:
             s = self.get_char()
             if s == '':
-                return Token(constant.T_EOF, s)
+                return Token(C.T_EOF, s)
             elif s == '\n':
-                return Token(constant.T_NEWLINE, s)
+                return Token(C.T_NEWLINE, s)
             elif s.isalpha() or s == '.':
                 while self.peek_char().isalnum():
                     s += self.get_char()
                 match s:
                     case 'hlt':
-                        return Token(constant.T_HLT, s)
+                        return Token(C.T_HLT, s)
                     case 'mov':
-                        return Token(constant.T_MOV, s)
+                        return Token(C.T_MOV, s)
                     case 'inc':
-                        return Token(constant.T_INC, s)
+                        return Token(C.T_INC, s)
                     case 'dec':
-                        return Token(constant.T_DEC, s)
+                        return Token(C.T_DEC, s)
                     case 'add':
-                        return Token(constant.T_ADD, s)
+                        return Token(C.T_ADD, s)
                     case 'sub':
-                        return Token(constant.T_SUB, s)
+                        return Token(C.T_SUB, s)
                     case 'and':
-                        return Token(constant.T_AND, s)
+                        return Token(C.T_AND, s)
                     case 'or':
-                        return Token(constant.T_OR, s)
+                        return Token(C.T_OR, s)
                     case 'xor':
-                        return Token(constant.T_XOR, s)
+                        return Token(C.T_XOR, s)
                     case 'not':
-                        return Token(constant.T_NOT, s)
+                        return Token(C.T_NOT, s)
                     case 'cmp':
-                        return Token(constant.T_CMP, s)
+                        return Token(C.T_CMP, s)
                     case 'jmp':
-                        return Token(constant.T_JMP, s)
+                        return Token(C.T_JMP, s)
                     case 'a' | 'b' | 'c' | 'd':
-                        return Token(constant.T_REGISTER, s)
+                        return Token(C.T_REGISTER, s)
                     case _:
-                        return Token(constant.T_IDENTIFIER, s)
+                        return Token(C.T_IDENTIFIER, s)
             elif s.isnumeric():
                 if s == '0':
                     c = self.peek_char()
@@ -70,15 +70,15 @@ class Lexer:
                         s += self.get_char()
                         while self.peek_char().isnumeric():
                             s += self.get_char()
-                        return Token(constant.T_IMMEDIATE, s)
+                        return Token(C.T_IMMEDIATE, s)
                 while self.peek_char().isnumeric():
                     s += self.get_char()
-                return Token(constant.T_IMMEDIATE, s)
+                return Token(C.T_IMMEDIATE, s)
             elif s == '$':
                 while self.peek_char().isalnum():
                     s += self.get_char()
-                return Token(constant.T_ADDRESS, s)
+                return Token(C.T_ADDRESS, s)
             elif s == ' ':
                 pass
             else:
-                return Token(constant.T_UNKNOWN, s)
+                return Token(C.T_UNKNOWN, s)
