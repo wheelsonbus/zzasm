@@ -22,7 +22,7 @@ class Parser:
             case 'd':
                 return constant.R_D
             case _:
-                raise Exception('Invalid register identifier: ' + s)
+                print('Invalid register identifier: ' + s)
 
     @staticmethod
     def parse_address(s):
@@ -30,7 +30,7 @@ class Parser:
         try:
             a = int(s[1:2], 16)
         except:
-           raise Exception('Invalid address identifier: ' + s)
+           print('Invalid address identifier: ' + s)
 
         if len(s) == 3 and s[0] == '$' and 255 >= a >= 0:
             return bytes([a])
@@ -43,26 +43,26 @@ class Parser:
             try:
                 i = int(s[2:], 2)
             except:
-               raise Exception('Invalid immediate identifier: ' + s)
+               print('Invalid immediate identifier: ' + s)
         elif s[0:2] == '0d':
             try:
                 i = int(s[2:], 10)
             except:
-               raise Exception('Invalid immediate identifier: ' + s)
+               print('Invalid immediate identifier: ' + s)
         elif s[0:2] == '0x':
             try:
                 i = int(s[2:], 16)
             except:
-               raise Exception('Invalid immediate identifier: ' + s)
+               print('Invalid immediate identifier: ' + s)
         else:
             try:
                 i = int(s, 10)
             except:
-               raise Exception('Invalid immediate identifier: ' + s)
+               print('Invalid immediate identifier: ' + s)
 
         if 255 >= i >= 0:
             return bytes([i])
-        raise Exception('Invalid address identifier: ' + s)
+        print('Invalid address identifier: ' + s)
 
     def parse(self, path_in, path_out):
         l = lexer.Lexer(path_in)
