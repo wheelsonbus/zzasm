@@ -31,19 +31,38 @@ class Lexer:
                 return Token(constant.T_EOF, s)
             elif s == '\n':
                 return Token(constant.T_NEWLINE, s)
-            elif s == ',':
-                return Token(constant.T_COMMA, s)
             elif s.isalpha() or s == '.':
                 while self.peek_char().isalnum():
                     s += self.get_char()
-                if s == 'hlt':
-                    return Token(constant.T_HLT, s)
-                elif s == 'mov':
-                    return Token(constant.T_MOV, s)
-                elif s == 'a' or s == 'b' or s == 'c' or s == 'd':
-                    return Token(constant.T_REGISTER, s)
-                else:
-                    return Token(constant.T_IDENTIFIER, s)
+                match s:
+                    case 'hlt':
+                        return Token(constant.T_HLT, s)
+                    case 'mov':
+                        return Token(constant.T_MOV, s)
+                    case 'inc':
+                        return Token(constant.T_INC, s)
+                    case 'dec':
+                        return Token(constant.T_DEC, s)
+                    case 'add':
+                        return Token(constant.T_ADD, s)
+                    case 'sub':
+                        return Token(constant.T_SUB, s)
+                    case 'and':
+                        return Token(constant.T_AND, s)
+                    case 'or':
+                        return Token(constant.T_OR, s)
+                    case 'xor':
+                        return Token(constant.T_XOR, s)
+                    case 'not':
+                        return Token(constant.T_NOT, s)
+                    case 'cmp':
+                        return Token(constant.T_CMP, s)
+                    case 'jmp':
+                        return Token(constant.T_JMP, s)
+                    case 'a' | 'b' | 'c' | 'd':
+                        return Token(constant.T_REGISTER, s)
+                    case _:
+                        return Token(constant.T_IDENTIFIER, s)
             elif s.isnumeric():
                 if s == '0':
                     c = self.peek_char()
