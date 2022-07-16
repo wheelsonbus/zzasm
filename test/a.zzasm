@@ -1,5 +1,5 @@
 mov a 0xff
 inc a
-cmp a 1
-jnz 0x03
+cmp a 0x08
+jna 0x03
 hlt

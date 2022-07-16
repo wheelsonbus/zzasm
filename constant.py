@@ -56,12 +56,12 @@ class C:
     OP_CMP_R_M = b'\x19'  # ...of register and memory address are equal
     OP_CMP_R_I = b'\x1A'  # ...of register and immediate are equal
     OP_JMP_I = b'\x1B'  # Unconditionally jumps to instruction at given address
-    OP_JZ_I = b'\x1C'  # Jumps if zero flag is true
-    OP_JNZ_I = b'\x1D'  # Jumps if zero flag is false
-    OP_JC_I = b'\x1E'  # Jumps if carry flag is true
-    OP_JNC_I = b'\x1F'  # Jumps if carry flag is false
-    OP_JA_I = b'\x20'  # Jumps if neither carry nor zero flag is true
-    OP_JNA_I = b'\x21'  # Jumps if either carry or zero flag is true
+    OP_JZ_I = b'\x1C'  # Jumps if zero flag is true (equal)
+    OP_JNZ_I = b'\x1D'  # Jumps if zero flag is false (not equal)
+    OP_JC_I = b'\x1E'  # Jumps if carry flag is true (lower than)
+    OP_JNC_I = b'\x1F'  # Jumps if carry flag is false (not lower than)
+    OP_JA_I = b'\x20'  # Jumps if neither carry nor zero flag is true (greater than)
+    OP_JNA_I = b'\x21'  # Jumps if either carry or zero flag is true (not greater than)
 
     # Register bytes
     R_A = b'\x00'
