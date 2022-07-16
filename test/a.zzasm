@@ -1,8 +1,5 @@
-mov a 0b0000
-mov b 0x02
-mov c 0d3
-mov d 4
+mov a 0xff
 inc a
-cmp a b
-jnz 12
+cmp a 1
+jnz 0x03
 hlt

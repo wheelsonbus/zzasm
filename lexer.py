@@ -90,7 +90,7 @@ class Lexer:
                     c = self.peek_char()
                     if c == 'b' or c == 'd' or c == 'x':
                         s += self.get_char()
-                        while self.peek_char().isnumeric():
+                        while self.peek_char().isalnum():
                             s += self.get_char()
                         return Token(C.T_IMMEDIATE, s)
                 while self.peek_char().isnumeric():
