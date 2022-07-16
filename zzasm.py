@@ -1,5 +1,4 @@
 import sys
-
 from constant import *
 from parser import *
 

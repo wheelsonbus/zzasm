@@ -1,5 +1,8 @@
-mov a 0b0001
+mov a 0b0000
 mov b 0x02
 mov c 0d3
 mov d 4
+inc a
+cmp a b
+jne 12
 hlt

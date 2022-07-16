@@ -68,7 +68,7 @@ class Parser:
             return bytes([i])
         print('Invalid address identifier: ' + s)
 
-    # Parses zzasm infile producing a zz outfile
+    # Parses a .zzasm infile producing a .zz outfile
     def parse(self, path_in, path_out):
         lexer = Lexer(path_in)
         self.f = open(path_out, 'wb')
@@ -214,11 +214,47 @@ class Parser:
                     else:
                         print('Invalid token for destination: ' + d.s)
 
-                # Unconditional jump opcode
+                # Jump opcodes
                 case C.T_JMP:
                     i = lexer.get_token()
                     if i.t == C.T_IMMEDIATE:
                         instruction = C.OP_JMP_I + self.parse_immediate(i.s)
+                    else:
+                        print('Invalid token for immediate: ' + i.s)
+                case C.T_JZ:
+                    i = lexer.get_token()
+                    if i.t == C.T_IMMEDIATE:
+                        instruction = C.OP_JZ_I + self.parse_immediate(i.s)
+                    else:
+                        print('Invalid token for immediate: ' + i.s)
+                case C.T_JNZ:
+                    i = lexer.get_token()
+                    if i.t == C.T_IMMEDIATE:
+                        instruction = C.OP_JNZ_I + self.parse_immediate(i.s)
+                    else:
+                        print('Invalid token for immediate: ' + i.s)
+                case C.T_JC:
+                    i = lexer.get_token()
+                    if i.t == C.T_IMMEDIATE:
+                        instruction = C.OP_JC_I + self.parse_immediate(i.s)
+                    else:
+                        print('Invalid token for immediate: ' + i.s)
+                case C.T_JNC:
+                    i = lexer.get_token()
+                    if i.t == C.T_IMMEDIATE:
+                        instruction = C.OP_JNC_I + self.parse_immediate(i.s)
+                    else:
+                        print('Invalid token for immediate: ' + i.s)
+                case C.T_JA:
+                    i = lexer.get_token()
+                    if i.t == C.T_IMMEDIATE:
+                        instruction = C.OP_JA_I + self.parse_immediate(i.s)
+                    else:
+                        print('Invalid token for immediate: ' + i.s)
+                case C.T_JNA:
+                    i = lexer.get_token()
+                    if i.t == C.T_IMMEDIATE:
+                        instruction = C.OP_JNA_I + self.parse_immediate(i.s)
                     else:
                         print('Invalid token for immediate: ' + i.s)
 

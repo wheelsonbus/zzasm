@@ -16,6 +16,12 @@ class C:
     T_NOT = 'not'
     T_CMP = 'cmp'
     T_JMP = 'jmp'
+    T_JZ = 'jz'
+    T_JNZ = 'jnz'
+    T_JC = 'jc'
+    T_JNC = 'jnc'
+    T_JA = 'ja'
+    T_JNA = 'jna'
     T_REGISTER = 'r'
     T_ADDRESS = '$'
     T_IMMEDIATE = '0'
@@ -50,6 +56,12 @@ class C:
     OP_CMP_R_M = b'\x19'  # ...of register and memory address are equal
     OP_CMP_R_I = b'\x1A'  # ...of register and immediate are equal
     OP_JMP_I = b'\x1B'  # Unconditionally jumps to instruction at given address
+    OP_JZ_I = b'\x1C'  # Jumps if zero flag is true
+    OP_JNZ_I = b'\x1D'  # Jumps if zero flag is false
+    OP_JC_I = b'\x1E'  # Jumps if carry flag is true
+    OP_JNC_I = b'\x1F'  # Jumps if carry flag is false
+    OP_JA_I = b'\x20' # Jumps if neither carry nor zero flag is true
+    OP_JNA_I = b'\x21'  # Jumps if either carry or zero flag is true
 
     # Register bytes
     R_A = b'\x00'

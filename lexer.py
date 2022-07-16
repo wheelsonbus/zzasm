@@ -4,8 +4,8 @@ from constant import *
 # Token data structure
 class Token:
     def __init__(self, t, s):
-        self.t = t
-        self.s = s
+        self.t = t  # Type
+        self.s = s  # String
 
 
 # Lexer class provides abstraction with which to split up and through individual tokens of an assembly file
