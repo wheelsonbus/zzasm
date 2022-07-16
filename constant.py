@@ -60,7 +60,7 @@ class C:
     OP_JNZ_I = b'\x1D'  # Jumps if zero flag is false
     OP_JC_I = b'\x1E'  # Jumps if carry flag is true
     OP_JNC_I = b'\x1F'  # Jumps if carry flag is false
-    OP_JA_I = b'\x20' # Jumps if neither carry nor zero flag is true
+    OP_JA_I = b'\x20'  # Jumps if neither carry nor zero flag is true
     OP_JNA_I = b'\x21'  # Jumps if either carry or zero flag is true
 
     # Register bytes

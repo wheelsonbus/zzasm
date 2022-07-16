@@ -68,6 +68,18 @@ class Lexer:
                         return Token(C.T_CMP, s)
                     case 'jmp':
                         return Token(C.T_JMP, s)
+                    case 'jz':
+                        return Token(C.T_JZ, s)
+                    case 'jnz':
+                        return Token(C.T_JNZ, s)
+                    case 'jc':
+                        return Token(C.T_JC, s)
+                    case 'jnc':
+                        return Token(C.T_JNC, s)
+                    case 'ja':
+                        return Token(C.T_JA, s)
+                    case 'jna':
+                        return Token(C.T_JNA, s)
                     case 'a' | 'b' | 'c' | 'd':
                         return Token(C.T_REGISTER, s)
                     case _:

@@ -4,5 +4,5 @@ mov c 0d3
 mov d 4
 inc a
 cmp a b
-jne 12
+jnz 12
 hlt
