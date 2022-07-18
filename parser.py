@@ -147,7 +147,9 @@ class Parser:
                         instruction = C.OP_INC_R + self.parse_register(r.s)
                     else:
                         print('Invalid token for register: ' + r.s)
+                    self.inc_ip()
                 case C.T_DEC:
+                    self.inc_ip()
                     r = lexer.get_token()
                     if r.t == C.T_REGISTER:
                         instruction = C.OP_INC_R + self.parse_register(r.s)
@@ -349,7 +351,7 @@ class Parser:
 
             # Write instruction to outfile
             self.f.write(instruction)
-            print(instruction)
+            print(str(instruction) + ': ' + str(self.ip))
 
         self.f.close()
 
