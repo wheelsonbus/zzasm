@@ -6,10 +6,21 @@ from lexer import *
 class Parser:
     def __init__(self):
         self.f = None
+        self.symbols = {}
+        self.unresolved = {}
+        self.ip = 0
 
     def __del__(self):
         if self.f:
             self.f.close()
+
+    # Increments the instruction pointer
+    def inc_ip(self):
+        self.ip += 1
+
+    # Returns the byte address of the current instruction
+    def at_ip(self):
+        return bytes([self.ip])
 
     # Returns an operand byte for a given assembly string identifying a register
     @staticmethod
@@ -68,7 +79,15 @@ class Parser:
 
         if 255 >= i >= 0:
             return bytes([i])
-        print('Invalid address identifier: ' + s)
+        print('Invalid immediate identifier: ' + s)
+
+    # Returns an address byte for a given assembly identifying and address label
+    def parse_identifier(self, s):
+        if s in self.symbols:
+            return self.symbols[s]
+        else:
+            self.unresolved[s] = self.ip
+            return b'\x00'
 
     # Parses a .zzasm infile producing a .zz outfile
     def parse(self, path_in, path_out):
@@ -79,13 +98,26 @@ class Parser:
             instruction = b''
 
             match t.t:
+                # Newline
+                case C.T_NEWLINE:
+                    continue
+
+                # Label
+                case C.T_IDENTIFIER:
+                    if t.s in self.symbols:
+                        print('Duplicate label: ' + t.s)
+                    self.symbols[t.s] = self.at_ip()
+
                 # Halt opcode
                 case C.T_HLT:
                     instruction = C.OP_HLT
+                    self.inc_ip()
 
                 # Move opcode
                 case C.T_MOV:
+                    self.inc_ip()
                     d = lexer.get_token()
+                    self.inc_ip()
                     s = lexer.get_token()
                     if d.t == C.T_REGISTER:
                         if s.t == C.T_REGISTER:
@@ -105,9 +137,11 @@ class Parser:
                             print('Invalid token for source: ' + s.s)
                     else:
                         print('Invalid token for destination: ' + d.s)
+                    self.inc_ip()
 
                 # Increment and decrement opcodes
                 case C.T_INC:
+                    self.inc_ip()
                     r = lexer.get_token()
                     if r.t == C.T_REGISTER:
                         instruction = C.OP_INC_R + self.parse_register(r.s)
@@ -119,10 +153,13 @@ class Parser:
                         instruction = C.OP_INC_R + self.parse_register(r.s)
                     else:
                         print('Invalid token for register: ' + r.s)
+                    self.inc_ip()
 
                 # Arithmetic opcodes
                 case C.T_ADD:
+                    self.inc_ip()
                     d = lexer.get_token()
+                    self.inc_ip()
                     s = lexer.get_token()
                     if d.t == C.T_REGISTER:
                         if s.t == C.T_REGISTER:
@@ -135,8 +172,11 @@ class Parser:
                             print('Invalid token for source: ' + s.s)
                     else:
                         print('Invalid token for destination: ' + d.s)
+                    self.inc_ip()
                 case C.T_SUB:
+                    self.inc_ip()
                     d = lexer.get_token()
+                    self.inc_ip()
                     s = lexer.get_token()
                     if d.t == C.T_REGISTER:
                         if s.t == C.T_REGISTER:
@@ -149,10 +189,13 @@ class Parser:
                             print('Invalid token for source: ' + s.s)
                     else:
                         print('Invalid token for destination: ' + d.s)
+                    self.inc_ip()
 
                 # Bitwise opcodes
                 case C.T_AND:
+                    self.inc_ip()
                     d = lexer.get_token()
+                    self.inc_ip()
                     s = lexer.get_token()
                     if d.t == C.T_REGISTER:
                         if s.t == C.T_REGISTER:
@@ -165,8 +208,11 @@ class Parser:
                             print('Invalid token for source: ' + s.s)
                     else:
                         print('Invalid token for destination: ' + d.s)
+                    self.inc_ip()
                 case C.T_OR:
+                    self.inc_ip()
                     d = lexer.get_token()
+                    self.inc_ip()
                     s = lexer.get_token()
                     if d.t == C.T_REGISTER:
                         if s.t == C.T_REGISTER:
@@ -179,8 +225,11 @@ class Parser:
                             print('Invalid token for source: ' + s.s)
                     else:
                         print('Invalid token for destination: ' + d.s)
+                    self.inc_ip()
                 case C.T_XOR:
+                    self.inc_ip()
                     d = lexer.get_token()
+                    self.inc_ip()
                     s = lexer.get_token()
                     if d.t == C.T_REGISTER:
                         if s.t == C.T_REGISTER:
@@ -193,16 +242,21 @@ class Parser:
                             print('Invalid token for source: ' + s.s)
                     else:
                         print('Invalid token for destination: ' + d.s)
+                    self.inc_ip()
                 case C.T_NOT:
+                    self.inc_ip()
                     r = lexer.get_token()
                     if r.t == C.T_REGISTER:
                         instruction = C.OP_NOT_R + self.parse_register(r.s)
                     else:
                         print('Invalid token for register: ' + r.s)
+                    self.inc_ip()
 
                 # Equality comparison opcode
                 case C.T_CMP:
+                    self.inc_ip()
                     d = lexer.get_token()
+                    self.inc_ip()
                     s = lexer.get_token()
                     if d.t == C.T_REGISTER:
                         if s.t == C.T_REGISTER:
@@ -215,57 +269,97 @@ class Parser:
                             print('Invalid token for source: ' + s.s)
                     else:
                         print('Invalid token for destination: ' + d.s)
+                    self.inc_ip()
 
                 # Jump opcodes
                 case C.T_JMP:
+                    self.inc_ip()
                     i = lexer.get_token()
                     if i.t == C.T_IMMEDIATE:
                         instruction = C.OP_JMP_I + self.parse_immediate(i.s)
+                    elif i.t == C.T_IDENTIFIER:
+                        instruction = C.OP_JMP_I + self.parse_identifier(i.s)
                     else:
                         print('Invalid token for immediate: ' + i.s)
+                    self.inc_ip()
                 case C.T_JZ:
+                    self.inc_ip()
                     i = lexer.get_token()
                     if i.t == C.T_IMMEDIATE:
                         instruction = C.OP_JZ_I + self.parse_immediate(i.s)
+                    elif i.t == C.T_IDENTIFIER:
+                        instruction = C.OP_JZ_I + self.parse_identifier(i.s)
                     else:
                         print('Invalid token for immediate: ' + i.s)
+                    self.inc_ip()
                 case C.T_JNZ:
+                    self.inc_ip()
                     i = lexer.get_token()
                     if i.t == C.T_IMMEDIATE:
                         instruction = C.OP_JNZ_I + self.parse_immediate(i.s)
+                    elif i.t == C.T_IDENTIFIER:
+                        instruction = C.OP_JNZ_I + self.parse_identifier(i.s)
                     else:
                         print('Invalid token for immediate: ' + i.s)
+                    self.inc_ip()
                 case C.T_JC:
+                    self.inc_ip()
                     i = lexer.get_token()
                     if i.t == C.T_IMMEDIATE:
                         instruction = C.OP_JC_I + self.parse_immediate(i.s)
+                    elif i.t == C.T_IDENTIFIER:
+                        instruction = C.OP_JC_I + self.parse_identifier(i.s)
                     else:
                         print('Invalid token for immediate: ' + i.s)
+                    self.inc_ip()
                 case C.T_JNC:
+                    self.inc_ip()
                     i = lexer.get_token()
                     if i.t == C.T_IMMEDIATE:
                         instruction = C.OP_JNC_I + self.parse_immediate(i.s)
+                    elif i.t == C.T_IDENTIFIER:
+                        instruction = C.OP_JNC_I + self.parse_identifier(i.s)
                     else:
                         print('Invalid token for immediate: ' + i.s)
+                    self.inc_ip()
                 case C.T_JA:
+                    self.inc_ip()
                     i = lexer.get_token()
                     if i.t == C.T_IMMEDIATE:
                         instruction = C.OP_JA_I + self.parse_immediate(i.s)
+                    elif i.t == C.T_IDENTIFIER:
+                        instruction = C.OP_JA_I + self.parse_identifier(i.s)
                     else:
                         print('Invalid token for immediate: ' + i.s)
+                    self.inc_ip()
                 case C.T_JNA:
+                    self.inc_ip()
                     i = lexer.get_token()
                     if i.t == C.T_IMMEDIATE:
                         instruction = C.OP_JNA_I + self.parse_immediate(i.s)
+                    elif i.t == C.T_IDENTIFIER:
+                        instruction = C.OP_JNA_I + self.parse_identifier(i.s)
                     else:
                         print('Invalid token for immediate: ' + i.s)
+                    self.inc_ip()
 
             # Necessitates a newline after each assembly instruction
             if lexer.get_token().t != C.T_NEWLINE:
-                print("Expected newline after instruction: " + str(instruction))
+                print('Expected newline after instruction: ' + str(instruction))
 
             # Write instruction to outfile
             self.f.write(instruction)
             print(instruction)
 
+        self.f.close()
+
+        # Resolve unhandled label references
+        self.f = open(path_out, 'rb+')
+        for key in self.unresolved:
+            if key in self.symbols:
+                print(key + ': ' + str(self.unresolved[key]) + ' <- ' + str(self.symbols[key]))
+                self.f.seek(self.unresolved[key])
+                self.f.write(self.symbols[key])
+            else:
+                print('Unresolved reference to ' + key)
         self.f.close()

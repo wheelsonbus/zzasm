@@ -1,7 +1,18 @@
-mov ha 0xff
-mov $ff 0xff
-mov a $ff
-inc a
-cmp a 0x08
-jna 0x09
-hlt
+    mov ha 0xff
+    mov $ff 0x01
+    mov a $ff
+    mov ha 0xfe
+    mov $ff 0x08
+    mov b $ff
+    cmp a b
+    jna loop
+
+loop
+    inc a
+    cmp a b
+    jna loop
+
+    mov ha 0xf0
+    mov $00 68
+    mov $01 69
+    hlt
