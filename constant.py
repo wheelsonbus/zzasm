@@ -68,3 +68,4 @@ class C:
     R_B = b'\x01'
     R_C = b'\x02'
     R_D = b'\x03'
+    R_HA = b'\x07'

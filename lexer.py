@@ -80,7 +80,7 @@ class Lexer:
                         return Token(C.T_JA, s)
                     case 'jna':
                         return Token(C.T_JNA, s)
-                    case 'a' | 'b' | 'c' | 'd':
+                    case 'a' | 'b' | 'c' | 'd' | 'ha':
                         return Token(C.T_REGISTER, s)
                     case _:
                         return Token(C.T_IDENTIFIER, s)

@@ -23,6 +23,8 @@ class Parser:
                 return C.R_C
             case 'd':
                 return C.R_D
+            case 'ha':
+                return C.R_HA
             case _:
                 print('Invalid register identifier: ' + s)
 
@@ -31,13 +33,13 @@ class Parser:
     def parse_address(s):
         a = -1
         try:
-            a = int(s[1:2], 16)
+            a = int(s[1:], 16)
         except:
            print('Invalid address identifier: ' + s)
 
         if len(s) == 3 and s[0] == '$' and 255 >= a >= 0:
             return bytes([a])
-        raise Exception('Invalid address identifier: ' + s)
+        print('Invalid address identifier: ' + s)
 
     # Returns an operand byte for a given assembly string identifying an immediate
     @staticmethod
